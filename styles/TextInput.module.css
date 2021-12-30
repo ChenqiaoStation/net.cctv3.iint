@@ -1,0 +1,12 @@
+.imageDoge {
+  height: 24px;
+  width: 24px;
+}
+
+.viewDogeContainer {
+  padding: 2px 4px;
+  border: 1px white;
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+}

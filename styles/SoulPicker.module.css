@@ -1,0 +1,23 @@
+.views {
+  height: 120px;
+  width: 480px;
+  background: white;
+  padding: 12px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  display: flex;
+}
+
+.viewItem {
+  height: 36px;
+  width: 36px;
+  padding: 2px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.imageItem {
+  height: 32px;
+  width: 32px;
+}
