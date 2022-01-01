@@ -1,18 +1,11 @@
 .views {
-  flex-direction: column;
-  display: flex;
-}
-
-.viewMainContainer {
+  padding: 4px;
   flex-direction: row;
+  align-items: center;
   display: flex;
 }
 
-.viewSlider {
-  width: 128px;
-}
-
-.viewContent {
-  flex: 1;
-  display: flex;
+.imageSiteLogo {
+  height: 48px;
+  width: auto;
 }

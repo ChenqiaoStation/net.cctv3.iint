@@ -1,18 +1,34 @@
 .views {
   flex-direction: column;
   display: flex;
+  flex: 1;
 }
 
 .viewMainContainer {
+  margin-top: 64px;
   flex-direction: row;
   display: flex;
+  flex: 1;
+  overflow-y: scroll;
 }
 
 .viewSlider {
-  width: 128px;
+  overflow: "auto";
+  height: "100vh";
+  position: "fixed";
+  left: 0;
+  width: 200px;
+  background-color: white;
+}
+
+.viewHeader {
+  position: fixed;
 }
 
 .viewContent {
+  margin-top: 64px;
+  margin-left: 256px;
+  display: block;
   flex: 1;
-  display: flex;
+  margin: 4px 32px;
 }
