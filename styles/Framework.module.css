@@ -1,0 +1,18 @@
+.views {
+  flex-direction: column;
+  display: flex;
+}
+
+.viewMainContainer {
+  flex-direction: row;
+  display: flex;
+}
+
+.viewSlider {
+  width: 128px;
+}
+
+.viewContent {
+  flex: 1;
+  display: flex;
+}
