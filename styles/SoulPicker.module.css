@@ -1,23 +1,36 @@
 .views {
-  height: 120px;
-  width: 480px;
+  width: 100%;
+  height: 128px;
+  flex-direction: column;
+  display: flex;
+  padding: 16px;
+  overflow-y: scroll;
   background: white;
-  padding: 12px;
+  border-radius: 16px;
+  margin: 4px 0;
+}
+
+.viewItems {
   flex-direction: row;
   flex-wrap: wrap;
   display: flex;
 }
-
 .viewItem {
   height: 36px;
   width: 36px;
-  padding: 2px;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   display: flex;
 }
 
-.imageItem {
+.viewItem:hover,
+.viewItem:focus,
+.viewItem:active {
+  background: #987123;
+  border-radius: 4px;
+}
+
+.imageSoul {
   height: 32px;
   width: 32px;
 }
