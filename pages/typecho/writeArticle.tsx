@@ -26,23 +26,7 @@ import {
 import { Host4NodeJS, Host4Springboot, useUUID } from "../../x";
 import TextInput from "../../components/TextInput";
 import { useRouter, withRouter } from "next/router";
-
-export interface Article {
-  id: string;
-  slug: string;
-  images: [];
-  tags: string[];
-  title: string;
-  message: string;
-  password?: string;
-  status: number;
-  score: number;
-  createTime: string;
-  updateTime?: string;
-  likeCount?: number;
-  lookCount?: number;
-  discusses?: any[];
-}
+import { Article } from "../../interfaces";
 
 interface ArticleProps {}
 
@@ -56,14 +40,14 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
       id: useUUID(),
       slug: "",
       images: [],
-      tags: ["C语言", "深度优先搜索"],
+      tags: [],
       title: [],
-      message: "Hello World.",
+      message: "",
       password: "",
       status: 1,
       score: 1,
-      createTime: "2022-01-23 12:34:56",
-      updateTime: "",
+      createTime: moment().format("YYYY-MM-DD HH:mm:ss"),
+      updateTime: moment().format("YYYY-MM-DD HH:mm:ss"),
       likeCount: 0,
       lookCount: 0,
       discusses: [],
