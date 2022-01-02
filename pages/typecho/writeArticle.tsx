@@ -23,7 +23,7 @@ import {
   EyeTwoTone,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Host4NodeJS } from "../../x";
+import { Host4NodeJS, Host4Springboot } from "../../x";
 import TextInput from "../../components/TextInput";
 
 export interface Article {
@@ -150,9 +150,13 @@ const WriteArticle: React.FC<ArticleProps> = () => {
         </Form.Item>
         <Form.Item label="文章头图">
           <Upload
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            listType="picture"
+            action={`${Host4Springboot}/fileUploader.action`}
+            listType='picture'
             maxCount={3}
+            data={{ target: "net.cctv3.next/cover" }}
+            onChange={(e) => {
+              console.log("🐞 ~ file: writeArticle.tsx ~ line 159 ~ e", e);
+            }}
           >
             <Button icon={<UploadOutlined />}>请上传文章缩略图</Button>
           </Upload>

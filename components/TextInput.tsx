@@ -29,7 +29,10 @@ const TextInput: React.FC<TextInputProps> = (props) => {
           console.log("Hello World.");
         }}
       >
-        <img src="/soulDoge.png" className={styles.imageDoge} />
+        <img
+          src="https://net-cctv3.oss-cn-qingdao.aliyuncs.com/HelloWorld.png"
+          className={styles.imageDoge}
+        />
         <div>Soul 表情</div>
       </a>
       <SoulPicker

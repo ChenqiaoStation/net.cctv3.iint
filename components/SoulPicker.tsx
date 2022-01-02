@@ -14,7 +14,6 @@ const SoulPicker: React.FC<SoulPickerProps> = (props) => {
     fetch(`${Host4NodeJS}/soul/selectSouls`, { method: "GET" })
       .then((response) => response.json())
       .then((json) => {
-        console.log(json);
         setSouls(json);
       });
     return () => {};
