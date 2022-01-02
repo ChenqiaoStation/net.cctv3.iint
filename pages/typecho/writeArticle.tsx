@@ -1,6 +1,6 @@
 import "antd/dist/antd.css";
 import React, { useEffect, useState } from "react";
-import { GetStaticProps } from "next";
+import { GetStaticProps, NextPage } from "next";
 import Frameweork from "../framework";
 import styles from "../../styles/Article.module.css";
 import moment from "moment";
@@ -23,11 +23,12 @@ import {
   EyeTwoTone,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Host4NodeJS, Host4Springboot } from "../../x";
+import { Host4NodeJS, Host4Springboot, useUUID } from "../../x";
 import TextInput from "../../components/TextInput";
+import { useRouter, withRouter } from "next/router";
 
 export interface Article {
-  id: number;
+  id: string;
   slug: string;
   images: [];
   tags: string[];
@@ -35,6 +36,7 @@ export interface Article {
   message: string;
   password?: string;
   status: number;
+  score: number;
   createTime: string;
   updateTime?: string;
   likeCount?: number;
@@ -44,11 +46,14 @@ export interface Article {
 
 interface ArticleProps {}
 
-const WriteArticle: React.FC<ArticleProps> = () => {
+const WriteArticle: React.FC<ArticleProps> = (props) => {
+  const router = useRouter();
   const [tags, setTags] = useState<any>([]);
+  const [loading, setLoading] = useState(false);
+
   const [article, setArticle] = useState<Article>(
     Object.assign({
-      id: 1,
+      id: useUUID(),
       slug: "",
       images: [],
       tags: ["C语言", "深度优先搜索"],
@@ -56,6 +61,7 @@ const WriteArticle: React.FC<ArticleProps> = () => {
       message: "Hello World.",
       password: "",
       status: 1,
+      score: 1,
       createTime: "2022-01-23 12:34:56",
       updateTime: "",
       likeCount: 0,
@@ -109,7 +115,7 @@ const WriteArticle: React.FC<ArticleProps> = () => {
    * @param key
    * @param value
    */
-  const onArticleChanged = (
+  const useArticleChanged = (
     key: keyof Article | string,
     value: Article[keyof Article]
   ) => {
@@ -120,10 +126,6 @@ const WriteArticle: React.FC<ArticleProps> = () => {
   };
 
   useEffect(() => {
-    console.log(
-      "🐞 ~ file: writeArticle.tsx ~ line 127 ~ useEffect ~ article",
-      article
-    );
     localStorage.setItem(new Date().toTimeString(), JSON.stringify(article));
     return () => {};
   }, [article]);
@@ -136,7 +138,7 @@ const WriteArticle: React.FC<ArticleProps> = () => {
             placeholder="请输入文章标题"
             value={article.title}
             onChange={(e) => {
-              onArticleChanged("title", e.target.value);
+              useArticleChanged("title", e.target.value);
             }}
           />
         </Form.Item>
@@ -144,18 +146,23 @@ const WriteArticle: React.FC<ArticleProps> = () => {
           <Input
             placeholder="请输入伪静态名，将来用作链接 http://www.cctv3.net/article?slug=xxx"
             onChange={(e) => {
-              onArticleChanged("title", e.target.value);
+              useArticleChanged("slug", e.target.value);
             }}
           />
         </Form.Item>
         <Form.Item label="文章头图">
           <Upload
             action={`${Host4Springboot}/fileUploader.action`}
-            listType='picture'
+            listType="picture"
             maxCount={3}
             data={{ target: "net.cctv3.next/cover" }}
             onChange={(e) => {
-              console.log("🐞 ~ file: writeArticle.tsx ~ line 159 ~ e", e);
+              useArticleChanged(
+                "images",
+                e.fileList
+                  .filter((it) => it.status == "done")
+                  .map((it) => it.name)
+              );
             }}
           >
             <Button icon={<UploadOutlined />}>请上传文章缩略图</Button>
@@ -167,10 +174,10 @@ const WriteArticle: React.FC<ArticleProps> = () => {
             multiple={true}
             value={article.tags}
             onSelect={(value) => {
-              onArticleChanged("tags", article.tags.concat(value.toString()));
+              useArticleChanged("tags", article.tags.concat(value.toString()));
             }}
             onDeselect={(value) => {
-              onArticleChanged(
+              useArticleChanged(
                 "tags",
                 article.tags.filter((it) => it != value)
               );
@@ -182,7 +189,7 @@ const WriteArticle: React.FC<ArticleProps> = () => {
           <TextInput
             defaultValue={article.message}
             onChange={(text) => {
-              onArticleChanged("message", text);
+              useArticleChanged("message", text);
             }}
           />
         </Form.Item>
@@ -192,7 +199,7 @@ const WriteArticle: React.FC<ArticleProps> = () => {
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
             onChange={(checked) => {
-              onArticleChanged("status", checked ? 1 : 0);
+              useArticleChanged("status", checked ? 1 : 0);
             }}
             defaultChecked
           />
@@ -204,7 +211,7 @@ const WriteArticle: React.FC<ArticleProps> = () => {
             placeholder="请选择时间"
             value={moment(article.createTime || new Date())}
             onChange={(moment, dateString) => {
-              onArticleChanged("createTime", dateString);
+              useArticleChanged("createTime", dateString);
             }}
           />
         </Form.Item>
@@ -214,19 +221,37 @@ const WriteArticle: React.FC<ArticleProps> = () => {
             iconRender={(visible) =>
               visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
             }
+            onChange={(e) => {
+              useArticleChanged("password", e.target.value);
+            }}
           />
         </Form.Item>
         <Form.Item label="优先级别: 数字越大优先级越高">
           <Rate
-            value={article.id}
+            value={article.score}
             character={({ index }) => index + 1}
             onChange={(score) => {
-              onArticleChanged("id", score);
+              useArticleChanged("score", score);
             }}
           />
         </Form.Item>
         <Form.Item label="发表文章">
-          <Button type="primary" style={{ width: "100%" }} onClick={() => {}}>
+          <Button
+            type="primary"
+            style={{ width: "100%" }}
+            loading={loading}
+            onClick={() => {
+              setLoading(true);
+              fetch(`${Host4NodeJS}/articles/updateArticle`, {
+                method: "POST",
+                body: JSON.stringify(article),
+              })
+                .then((response) => response.json())
+                .then((response) => {
+                  router.back();
+                });
+            }}
+          >
             发表文章
           </Button>
         </Form.Item>
@@ -239,4 +264,4 @@ export const getStaticProps: GetStaticProps = async () => {
   return { props: {} };
 };
 
-export default WriteArticle;
+export default withRouter(WriteArticle);
