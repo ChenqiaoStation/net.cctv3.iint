@@ -46,7 +46,7 @@ const WriteArticle: React.FC<UploadPicturesProps> = (props) => {
             <Button icon={<UploadOutlined />}>请上传图骗</Button>
           </Upload>
         </Form.Item>
-        
+
         <Form.Item label="上传所有图骗">
           <Button
             type="primary"
@@ -54,7 +54,7 @@ const WriteArticle: React.FC<UploadPicturesProps> = (props) => {
             loading={loading}
             onClick={() => {
               setLoading(true);
-              fetch(`${Host4NodeJS}/albums/insertPictures`, {
+              fetch(`${Host4NodeJS}/album/insertPictures`, {
                 method: "POST",
                 body: JSON.stringify({ id: router.query.id, data: pictures }),
               }).then((response) => {

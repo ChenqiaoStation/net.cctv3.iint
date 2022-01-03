@@ -2,7 +2,6 @@ import { OSSTarget } from "./interfaces";
 
 const Host4NodeJS = "http://localhost:2021/api";
 const Host4Springboot = "http://localhost:8080";
-const OSS = "net.cctv3.next/cover/%E5%B0%8F%E5%A7%90%E5%A7%90.png";
 
 /**
  * 使用 OSS 生成图片链接

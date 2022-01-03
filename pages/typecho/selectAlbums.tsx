@@ -106,7 +106,7 @@ const SelectAlbums: React.FC<ArticleProps> = (props) => {
   };
 
   useEffect(() => {
-    fetch(`${Host4NodeJS}/albums/selectAlbums`)
+    fetch(`${Host4NodeJS}/album/selectAlbums`)
       .then((repsonse) => repsonse.json())
       .then((json) => {
         setAlbums(json);

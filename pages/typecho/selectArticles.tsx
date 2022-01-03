@@ -74,7 +74,7 @@ const SelectArticles: React.FC<ArticleProps> = (props) => {
   };
 
   useEffect(() => {
-    fetch(`${Host4NodeJS}/articles/selectArticles`)
+    fetch(`${Host4NodeJS}/article/selectArticles`)
       .then((repsonse) => repsonse.json())
       .then((json) => {
         setArticles(json);

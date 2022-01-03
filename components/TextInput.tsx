@@ -4,6 +4,7 @@ import styles from "../styles/TextInput.module.css";
 import { Button } from "antd";
 import SoulPicker from "./SoulPicker";
 import TextArea from "antd/lib/input/TextArea";
+import { useOSS } from "../x";
 
 interface TextInputProps {
   onChange: (text: string) => void;
@@ -30,7 +31,11 @@ const TextInput: React.FC<TextInputProps> = (props) => {
         }}
       >
         <img
-          src="https://net-cctv3.oss-cn-qingdao.aliyuncs.com/HelloWorld.png"
+          src={useOSS({
+            project: "net.cctv3.next",
+            target: "config",
+            file: "SoulDog.png",
+          })}
           className={styles.imageDoge}
         />
         <div>Soul 表情</div>
@@ -48,6 +53,8 @@ const TextInput: React.FC<TextInputProps> = (props) => {
       />
       <TextArea
         value={value}
+        autoSize={true}
+        showCount={true}
         onChange={(e) => {
           setValue(e.target.value);
         }}

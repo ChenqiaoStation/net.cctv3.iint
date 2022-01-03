@@ -50,7 +50,7 @@ const WriteArticle: React.FC<UploadAlbumProps> = (props) => {
   );
 
   useEffect(() => {
-    fetch(`${Host4NodeJS}/albums/selectAlbum?id=${router.query.id}`)
+    fetch(`${Host4NodeJS}/album/selectAlbum?id=${router.query.id}`)
       .then((response) => response.json())
       .then((json) => {
         if (json.status == 1) {
@@ -173,7 +173,7 @@ const WriteArticle: React.FC<UploadAlbumProps> = (props) => {
             loading={loading}
             onClick={() => {
               setLoading(true);
-              fetch(`${Host4NodeJS}/albums/updateAlbum`, {
+              fetch(`${Host4NodeJS}/album/updateAlbum`, {
                 method: "POST",
                 body: JSON.stringify(album),
               }).then((response) => {

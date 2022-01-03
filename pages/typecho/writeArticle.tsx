@@ -15,6 +15,7 @@ import {
   Upload,
   TreeSelect,
   Checkbox,
+  message,
 } from "antd";
 import {
   CloseOutlined,
@@ -41,7 +42,7 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
       slug: "",
       images: [],
       tags: [],
-      title: '',
+      title: "",
       message: "",
       password: "",
       status: true,
@@ -50,12 +51,12 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
       updateTime: "",
       likeCount: 0,
       lookCount: 0,
-      discusses: [],
+      discussCount: 0,
     })
   );
 
   useEffect(() => {
-    fetch(`${Host4NodeJS}/tags/selectTags`)
+    fetch(`${Host4NodeJS}/tag/selectTags`)
       .then((repsonse) => repsonse.json())
       .then((json) => {
         setTags(
@@ -76,13 +77,15 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    fetch(`${Host4NodeJS}/articles/selectArticle?id=${router.query.id}`)
-      .then((response) => response.json())
-      .then((json) => {
-        if (json.status == 1) {
-          setArticle(Object.assign({}, article, json.data));
-        }
-      });
+    message.info("🐞: " + "article id = " + router.query.id);
+    router.query.id &&
+      fetch(`${Host4NodeJS}/article/selectArticle?id=${router.query.id}`)
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.status == 1) {
+            setArticle(Object.assign({}, article, json.data));
+          }
+        });
     return () => {};
   }, [router]);
 
@@ -239,7 +242,7 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
             loading={loading}
             onClick={() => {
               setLoading(true);
-              fetch(`${Host4NodeJS}/articles/updateArticle`, {
+              fetch(`${Host4NodeJS}/article/updateArticle`, {
                 method: "POST",
                 body: JSON.stringify(article),
               }).then((response) => {

@@ -23,7 +23,7 @@ export interface Article {
   updateTime?: string;
   likeCount?: number;
   lookCount?: number;
-  discusses?: any[] | number;
+  discussCount: number;
 }
 
 export interface Picture {
@@ -53,4 +53,17 @@ export interface OSSTarget {
   project: "net.cctv3.next";
   target: "cover" | "article" | "album" | "config" | "picture";
   file: string;
+}
+
+export interface Discuss {
+  id: string;
+  parent?: string;
+  title: string;
+  message: string;
+  status: boolean;
+  email: string;
+  agent: string;
+  address: string;
+  time: string;
+  children: Discuss[];
 }

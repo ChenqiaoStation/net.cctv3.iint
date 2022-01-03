@@ -24,7 +24,7 @@ const SelectPictures: React.FC<SelectPicturesProps> = (props) => {
   }, [router]);
 
   const loadDatas = () => {
-    fetch(`${Host4NodeJS}/albums/selectAlbum?id=${router.query.id}`)
+    fetch(`${Host4NodeJS}/album/selectAlbum?id=${router.query.id}`)
       .then((response) => response.json())
       .then((json) => {
         if (json.status == 1) {
@@ -121,7 +121,7 @@ const SelectPictures: React.FC<SelectPicturesProps> = (props) => {
         visible={isShowUpdateModal}
         title={selectItem.title}
         onOk={() => {
-          fetch(`${Host4NodeJS}/albums/updatePicture`, {
+          fetch(`${Host4NodeJS}/album/updatePicture`, {
             method: "POST",
             body: JSON.stringify({ id: router.query.id, data: pictures }),
           })
