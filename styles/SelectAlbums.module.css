@@ -1,0 +1,21 @@
+.views {
+  flex-direction: column;
+  display: flex;
+  flex: 1;
+}
+
+.viewHeader {
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+}
+
+.inputSearch {
+  flex: 1;
+}
+
+.viewButtons {
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+}

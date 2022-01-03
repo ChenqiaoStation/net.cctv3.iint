@@ -41,13 +41,13 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
       slug: "",
       images: [],
       tags: [],
-      title: [],
+      title: '',
       message: "",
       password: "",
-      status: 1,
+      status: true,
       score: 1,
       createTime: moment().format("YYYY-MM-DD HH:mm:ss"),
-      updateTime: moment().format("YYYY-MM-DD HH:mm:ss"),
+      updateTime: "",
       likeCount: 0,
       lookCount: 0,
       discusses: [],
@@ -74,6 +74,17 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
       });
     return () => {};
   }, []);
+
+  useEffect(() => {
+    fetch(`${Host4NodeJS}/articles/selectArticle?id=${router.query.id}`)
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.status == 1) {
+          setArticle(Object.assign({}, article, json.data));
+        }
+      });
+    return () => {};
+  }, [router]);
 
   /**
    * 旧的数组扁平化
@@ -104,6 +115,7 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
     value: Article[keyof Article]
   ) => {
     setArticle((article) => {
+      article.updateTime = moment().format("YYYY-MM-DD HH:mm:ss");
       article[key] = value;
       return Object.assign({}, article);
     });
@@ -139,6 +151,7 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
             action={`${Host4Springboot}/fileUploader.action`}
             listType="picture"
             maxCount={3}
+            multiple={true}
             data={{ target: "net.cctv3.next/cover" }}
             onChange={(e) => {
               useArticleChanged(
@@ -179,11 +192,11 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
         </Form.Item>
         <Form.Item label="是否公开">
           <Switch
-            checked={article.status == 1}
+            checked={article.status}
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
             onChange={(checked) => {
-              useArticleChanged("status", checked ? 1 : 0);
+              useArticleChanged("status", checked);
             }}
             defaultChecked
           />
@@ -229,11 +242,9 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
               fetch(`${Host4NodeJS}/articles/updateArticle`, {
                 method: "POST",
                 body: JSON.stringify(article),
-              })
-                .then((response) => response.json())
-                .then((response) => {
-                  router.back();
-                });
+              }).then((response) => {
+                router.back();
+              });
             }}
           >
             发表文章

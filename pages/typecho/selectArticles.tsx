@@ -1,6 +1,4 @@
-import {
-  Table
-} from "antd";
+import { Table, Input, Button, Switch } from "antd";
 import "antd/dist/antd.css";
 import moment from "moment";
 import { GetStaticProps } from "next";
@@ -9,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { Article } from "../../interfaces";
 import { Host4NodeJS } from "../../x";
 import Frameweork from "../framework";
+import styles from "../../styles/SelectArticles.module.css";
 
 interface ArticleProps {}
 
@@ -24,16 +23,7 @@ const SelectArticles: React.FC<ArticleProps> = (props) => {
       render: (id: string) => (
         <a
           onClick={() => {
-            router.push(
-              {
-                pathname: "/typecho/writeArticle",
-                query: {
-                  id: id,
-                },
-              },
-              undefined,
-              { shallow: false }
-            );
+            navigate2WritePage(id);
           }}
         >
           {id}
@@ -43,7 +33,12 @@ const SelectArticles: React.FC<ArticleProps> = (props) => {
     { title: "标题", dataIndex: "title", key: "title" },
     { title: "缩略名", dataIndex: "slug", key: "slug" },
     { title: "标签", dataIndex: "tags", key: "tags" },
-    { title: "状态", dataIndex: "status", key: "status" },
+    {
+      title: "状态",
+      dataIndex: "status",
+      key: "status",
+      render: (status: boolean) => <Switch checked={status} />,
+    },
     { title: "序号", dataIndex: "score", key: "score" },
     { title: "浏览", dataIndex: "lookCount", key: "lookCount" },
     { title: "评论", dataIndex: "discusses", key: "discusses" },
@@ -61,6 +56,23 @@ const SelectArticles: React.FC<ArticleProps> = (props) => {
     },
   ];
 
+  /**
+   * 跳转到 WritePage 页面
+   * @param id
+   */
+  const navigate2WritePage = (id?: string) => {
+    router.push(
+      {
+        pathname: "/typecho/writeArticle",
+        query: {
+          id: id,
+        },
+      },
+      undefined,
+      { shallow: false }
+    );
+  };
+
   useEffect(() => {
     fetch(`${Host4NodeJS}/articles/selectArticles`)
       .then((repsonse) => repsonse.json())
@@ -72,7 +84,30 @@ const SelectArticles: React.FC<ArticleProps> = (props) => {
 
   return (
     <Frameweork>
-      <Table dataSource={articles} columns={columns} size="small" />
+      <div className={styles.viewHeader}>
+        <Input.Search
+          placeholder="请输入关键字进行搜索"
+          allowClear
+          onSearch={() => {}}
+          style={{ flex: 1 }}
+        />
+        <div style={{ width: 16 }} />
+        <Button
+          type="primary"
+          onClick={() => {
+            navigate2WritePage();
+          }}
+        >
+          新建文章
+        </Button>
+      </div>
+      <div style={{ height: 16 }} />
+      <Table
+        dataSource={articles}
+        columns={columns}
+        bordered={true}
+        size="small"
+      />
     </Frameweork>
   );
 };
