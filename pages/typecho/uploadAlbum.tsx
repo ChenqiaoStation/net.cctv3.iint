@@ -106,7 +106,7 @@ const WriteArticle: React.FC<UploadAlbumProps> = (props) => {
               listType="picture"
               maxCount={1}
               multiple={true}
-              data={{ target: "net.cctv3.next/cover" }}
+              data={{ target: "net.cctv3.next/album" }}
               onChange={(e) => {
                 useArticleChanged("file", e.fileList[0].name);
               }}

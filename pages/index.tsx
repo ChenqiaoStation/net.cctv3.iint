@@ -1,7 +1,6 @@
 import "antd/dist/antd.css";
 import React, { useEffect } from "react";
 import { GetStaticProps } from "next";
-import { Layout } from "antd";
 import Frameweork from "./framework";
 import _ from "lodash";
 
