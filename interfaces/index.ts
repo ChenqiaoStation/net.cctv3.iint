@@ -62,6 +62,7 @@ export interface Discuss {
   message: string;
   status: boolean;
   email: string;
+  IP: string;
   agent: string;
   address: string;
   time: string;

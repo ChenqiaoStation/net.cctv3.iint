@@ -8,11 +8,11 @@ import { useOSS } from "../x";
 
 interface TextInputProps {
   onChange: (text: string) => void;
-  defaultValue: string;
+  value: string;
 }
 
 const TextInput: React.FC<TextInputProps> = (props) => {
-  const [value, setValue] = useState(props.defaultValue);
+  const [value, setValue] = useState("");
   const [isShowSoul, setIsShowSoul] = useState(false);
   const [cursorPosition, setCursorPosition] = useState(0);
 
@@ -20,6 +20,13 @@ const TextInput: React.FC<TextInputProps> = (props) => {
     props.onChange(value);
     return () => {};
   }, [value]);
+
+  useEffect(() => {
+    if (props.value != value) {
+      setValue(props.value);
+    }
+    return () => {};
+  }, [props.value]);
 
   return (
     <div>

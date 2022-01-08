@@ -5,7 +5,6 @@ import Frameweork from "../framework";
 import styles from "../../styles/Article.module.css";
 import moment from "moment";
 import {
-  Form,
   Input,
   Button,
   Radio,
@@ -28,6 +27,8 @@ import { Host4NodeJS, Host4Springboot, useUUID } from "../../x";
 import TextInput from "../../components/TextInput";
 import { useRouter, withRouter } from "next/router";
 import { Article } from "../../interfaces";
+import FormItem from "../../components/FormItem";
+import TextArea from "antd/lib/input/TextArea";
 
 interface ArticleProps {}
 
@@ -99,7 +100,7 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
       return result.concat(
         typeof item === "string"
           ? {
-              label: item,
+              title: item,
               value: item,
               select: Math.random() < 0.5,
             }
@@ -131,8 +132,8 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
 
   return (
     <Frameweork>
-      <Form className={styles.views} layout={"vertical"}>
-        <Form.Item label="文章标题">
+      <div className={styles.views}>
+        <FormItem title="文章标题">
           <Input
             placeholder="请输入文章标题"
             value={article.title}
@@ -140,16 +141,17 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
               useArticleChanged("title", e.target.value);
             }}
           />
-        </Form.Item>
-        <Form.Item label="伪静态名">
+        </FormItem>
+        <FormItem title="伪静态名">
           <Input
+            value={article.slug}
             placeholder="请输入伪静态名，将来用作链接 http://www.cctv3.net/article?slug=xxx"
             onChange={(e) => {
               useArticleChanged("slug", e.target.value);
             }}
           />
-        </Form.Item>
-        <Form.Item label="文章头图">
+        </FormItem>
+        <FormItem title="文章头图">
           <Upload
             action={`${Host4Springboot}/fileUploader.action`}
             listType="picture"
@@ -167,8 +169,8 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
           >
             <Button icon={<UploadOutlined />}>请上传文章缩略图</Button>
           </Upload>
-        </Form.Item>
-        <Form.Item label="分类标签">
+        </FormItem>
+        <FormItem title="分类标签">
           <TreeSelect
             treeData={tags}
             multiple={true}
@@ -184,17 +186,18 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
             }}
             placeholder="请选择文章分类: 父级标签不可选"
           />
-        </Form.Item>
-        <Form.Item label="文章内容">
+        </FormItem>
+        <FormItem title="文章内容">
           <TextInput
-            defaultValue={article.message}
+            value={article.message}
             onChange={(text) => {
               useArticleChanged("message", text);
             }}
           />
-        </Form.Item>
-        <Form.Item label="是否公开">
+        </FormItem>
+        <FormItem title="是否公开">
           <Switch
+            style={{ width: 32 }}
             checked={article.status}
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
@@ -203,8 +206,8 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
             }}
             defaultChecked
           />
-        </Form.Item>
-        <Form.Item label="创作时间">
+        </FormItem>
+        <FormItem title="创作时间">
           <DatePicker
             renderExtraFooter={() => <div />}
             showTime
@@ -214,8 +217,8 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
               useArticleChanged("createTime", dateString);
             }}
           />
-        </Form.Item>
-        <Form.Item label="密码保护">
+        </FormItem>
+        <FormItem title="密码保护">
           <Input.Password
             placeholder="请输入密码，默认为: net.cctv3.i"
             iconRender={(visible) =>
@@ -225,8 +228,8 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
               useArticleChanged("password", e.target.value);
             }}
           />
-        </Form.Item>
-        <Form.Item label="优先级别: 数字越大优先级越高">
+        </FormItem>
+        <FormItem title="优先级别: 数字越大优先级越高">
           <Rate
             value={article.score}
             character={({ index }) => index + 1}
@@ -234,8 +237,8 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
               useArticleChanged("score", score);
             }}
           />
-        </Form.Item>
-        <Form.Item label="发表文章">
+        </FormItem>
+        <FormItem title="发表文章">
           <Button
             type="primary"
             style={{ width: "100%" }}
@@ -252,8 +255,8 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
           >
             发表文章
           </Button>
-        </Form.Item>
-      </Form>
+        </FormItem>
+      </div>
     </Frameweork>
   );
 };

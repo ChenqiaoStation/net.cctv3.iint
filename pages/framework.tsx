@@ -15,6 +15,7 @@ import {
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import { GetStaticProps } from "next";
+import { useRouter } from "next/router";
 import React from "react";
 import MyHeader from "../components/MyHeader";
 import styles from "../styles/Framework.module.css";
@@ -48,20 +49,14 @@ const pages = [
       {
         name: "文章内容",
         key: "articles",
-        page: "/editArticles",
+        page: "/selectArticles",
         icon: <EditOutlined />,
       },
       {
         name: "相册分类",
         key: "albums",
-        page: "/editAlbums",
+        page: "/selectAlbums",
         icon: <FolderOpenOutlined />,
-      },
-      {
-        name: "相册内容",
-        key: "pictures",
-        page: "/editPictures",
-        icon: <PictureOutlined />,
       },
       {
         name: "链接管理",
@@ -109,6 +104,7 @@ const { SubMenu } = Menu;
 export interface FrameworkProps {}
 
 const Slider = () => {
+  const router = useRouter();
   const [openKeys, setOpenKeys] = React.useState(
     Array.from(pages, (_, i) => _.key)
   );
