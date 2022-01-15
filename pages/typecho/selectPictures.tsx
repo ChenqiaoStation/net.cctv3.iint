@@ -13,7 +13,6 @@ interface SelectPicturesProps {}
 
 const SelectPictures: React.FC<SelectPicturesProps> = (props) => {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [pictures, setPictures] = useState<Picture[]>([]);
   const [selectItem, setSelectItem] = useState<Picture>(Object.create(null));
   const [isShowUpdateModal, setIsShowUpdateModal] = useState(false);

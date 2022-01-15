@@ -68,3 +68,14 @@ export interface Discuss {
   time: string;
   children: Discuss[];
 }
+
+export interface Music {
+  id: string;
+  name: string; // 我从草原来
+  artist: string; // 凤凰传奇
+  url: string;
+  cover: string;
+  lrc: string;
+  status: boolean;
+  score: number;
+}
