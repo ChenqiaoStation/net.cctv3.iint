@@ -12,13 +12,15 @@ import {
   EditOutlined,
   SlackOutlined,
   CodeOutlined,
+  ChromeOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu } from "antd";
+
+import { Layout, Menu, message, notification } from "antd";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MyHeader from "../components/MyHeader";
-import styles from "../styles/Framework.module.css";
+
 const { Header, Content, Footer, Sider } = Layout;
 
 const pages = [
@@ -37,13 +39,13 @@ const pages = [
   },
   {
     name: "博客管理",
-    key: "Blog",
+    key: "typecho",
     icon: <GithubOutlined />,
     children: [
       {
         name: "文章分类",
         key: "keywords",
-        page: "/editKeywords",
+        page: "/",
         icon: <TagsOutlined />,
       },
       {
@@ -61,25 +63,19 @@ const pages = [
       {
         name: "链接管理",
         key: "links",
-        page: "/editLinks",
+        page: "/",
         icon: <SortDescendingOutlined />,
       },
       {
-        name: "时光管理",
+        name: "歌曲管理",
         key: "timers",
-        page: "/editTimers",
-        icon: <ClockCircleOutlined />,
-      },
-      {
-        name: "养鸡管理",
-        key: "jj",
-        page: "/editJJ",
-        icon: <DotChartOutlined />,
+        page: "/selectMusics",
+        icon: <ChromeOutlined />,
       },
       {
         name: "评论管理",
         key: "discusses",
-        page: "/editDiscusses",
+        page: "/",
         icon: <CommentOutlined />,
       },
     ],
@@ -105,26 +101,40 @@ export interface FrameworkProps {}
 
 const Slider = () => {
   const router = useRouter();
+  const [selectedKeys, setSelectedKeys] = useState(["discusses"]);
   const [openKeys, setOpenKeys] = React.useState(
     Array.from(pages, (_, i) => _.key)
   );
 
-  const onOpenChange = (keys: string[]) => {
-    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
-    if (Array.from(pages, (_, i) => _.key).indexOf(latestOpenKey) === -1) {
-      setOpenKeys(keys);
-    } else {
-      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
-    }
-  };
+  useEffect(() => {
+    setSelectedKeys([localStorage.getItem("selectedKey")]);
+    return () => {};
+  }, [router]);
+
   return (
-    <Menu mode="inline" openKeys={openKeys} onOpenChange={onOpenChange}>
+    <Menu mode="inline" openKeys={openKeys} selectedKeys={selectedKeys}>
       {Array.from(pages, (_, i) => {
         let children = _.children;
         return (
           <SubMenu key={_.key} icon={_.icon} title={_.name}>
             {Array.from(children, (__, i) => (
-              <Menu.Item icon={__.icon} onClick={(menu) => {}} key={__.key}>
+              <Menu.Item
+                icon={__.icon}
+                onClick={(menu) => {
+                  if (__.page == "/") {
+                    notification.error({
+                      message: `${__.key} for ${__.name} not found.`,
+                    });
+                  } else {
+                    localStorage.setItem("selectedKey", __.key);
+                    __.page != "/" &&
+                      router.push(`/${_.key}/${__.page}`, undefined, {
+                        shallow: true,
+                      });
+                  }
+                }}
+                key={__.key}
+              >
                 {__.name}
               </Menu.Item>
             ))}

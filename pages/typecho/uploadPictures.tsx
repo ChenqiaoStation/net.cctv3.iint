@@ -34,7 +34,7 @@ const WriteArticle: React.FC<UploadPicturesProps> = (props) => {
                   .map((it) => ({
                     id: useUUID(),
                     file: it.name,
-                    title: it.name,
+                    title: it.name.substring(0, 16),
                     message: "",
                     status: true,
                     createTime: moment().format("YYYY-MM-DD HH:mm:ss"),
