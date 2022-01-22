@@ -18,6 +18,7 @@ export interface Article {
   message: string;
   password?: string;
   status: boolean;
+  independent: boolean; // 是否独立页面
   score: number;
   createTime: string;
   updateTime?: string;

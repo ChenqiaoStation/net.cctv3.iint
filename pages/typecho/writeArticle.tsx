@@ -47,6 +47,7 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
       message: "",
       password: "",
       status: true,
+      independent: false,
       score: 1,
       createTime: moment().format("YYYY-MM-DD HH:mm:ss"),
       updateTime: "",
@@ -203,6 +204,18 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
             unCheckedChildren={<CloseOutlined />}
             onChange={(checked) => {
               useArticleChanged("status", checked);
+            }}
+            defaultChecked
+          />
+        </FormItem>
+        <FormItem title="是否独立页面">
+          <Switch
+            style={{ width: 32 }}
+            checked={article.independent}
+            checkedChildren={<CheckOutlined />}
+            unCheckedChildren={<CloseOutlined />}
+            onChange={(checked) => {
+              useArticleChanged("independent", checked);
             }}
             defaultChecked
           />

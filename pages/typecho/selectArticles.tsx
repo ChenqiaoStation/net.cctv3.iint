@@ -1,4 +1,4 @@
-import { Table, Input, Button, Switch } from "antd";
+import { Table, Input, Button, Switch, Popover, Tooltip } from "antd";
 import "antd/dist/antd.css";
 import moment from "moment";
 import { GetStaticProps } from "next";
@@ -30,14 +30,49 @@ const SelectArticles: React.FC<ArticleProps> = (props) => {
         </a>
       ),
     },
-    { title: "标题", dataIndex: "title", key: "title" },
-    { title: "缩略名", dataIndex: "slug", key: "slug" },
-    { title: "标签", dataIndex: "tags", key: "tags" },
+    {
+      title: "标题",
+      dataIndex: "title",
+      key: "title",
+      render: (title: string) => (
+        <Tooltip title={title}>
+          <div>{title.substring(0, 36)}</div>
+        </Tooltip>
+      ),
+    },
+    {
+      title: "缩略名",
+      dataIndex: "slug",
+      key: "slug",
+      render: (title: string) => (
+        <Tooltip title={title}>
+          <div>
+            {title.length > 16 ? title.substring(0, 16) + "..." : title}
+          </div>
+        </Tooltip>
+      ),
+    },
+    {
+      title: "标签",
+      dataIndex: "tags",
+      key: "tags",
+      render: (tags: string[]) => (
+        <Tooltip title={tags.join(" ")}>
+          <div>{`${tags.length}个标签`}</div>
+        </Tooltip>
+      ),
+    },
     {
       title: "状态",
       dataIndex: "status",
       key: "status",
       render: (status: boolean) => <Switch checked={status} />,
+    },
+    {
+      title: "独立页面",
+      dataIndex: "independent",
+      key: "independent",
+      render: (independent: boolean) => <Switch checked={independent} />,
     },
     { title: "序号", dataIndex: "score", key: "score" },
     { title: "浏览", dataIndex: "lookCount", key: "lookCount" },
