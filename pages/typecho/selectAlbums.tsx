@@ -5,7 +5,7 @@ import { GetStaticProps } from "next";
 import { useRouter, withRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { Album, Article } from "../../interfaces";
-import { Host4NodeJS } from "../../x";
+import { Host4NodeJS, useHttpGet } from "../../x";
 import Frameweork from "../framework";
 import styles from "../../styles/SelectAlbums.module.css";
 
@@ -106,11 +106,9 @@ const SelectAlbums: React.FC<ArticleProps> = (props) => {
   };
 
   useEffect(() => {
-    fetch(`${Host4NodeJS}/album/selectAlbums`)
-      .then((repsonse) => repsonse.json())
-      .then((json) => {
-        setAlbums(json);
-      });
+    (async () => {
+      setAlbums(await useHttpGet(`${Host4NodeJS}/album/selectAlbums`));
+    })();
     return () => {};
   }, []);
 

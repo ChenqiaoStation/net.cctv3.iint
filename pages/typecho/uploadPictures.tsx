@@ -7,7 +7,7 @@ import { useRouter, withRouter } from "next/router";
 import React, { useState } from "react";
 import { Picture } from "../../interfaces";
 import styles from "../../styles/Article.module.css";
-import { Host4NodeJS, Host4Springboot, useUUID } from "../../x";
+import { Host4NodeJS, Host4Springboot, useHttpPost, useUUID } from "../../x";
 import Frameweork from "../framework";
 
 interface UploadPicturesProps {}
@@ -52,14 +52,13 @@ const WriteArticle: React.FC<UploadPicturesProps> = (props) => {
             type="primary"
             style={{ width: "100%" }}
             loading={loading}
-            onClick={() => {
+            onClick={async () => {
               setLoading(true);
-              fetch(`${Host4NodeJS}/album/insertPictures`, {
-                method: "POST",
-                body: JSON.stringify({ id: router.query.id, data: pictures }),
-              }).then((response) => {
-                router.back();
-              });
+              await useHttpPost(
+                `${Host4NodeJS}/album/insertPictures`,
+                JSON.stringify({ id: router.query.id, data: pictures })
+              );
+              router.back();
             }}
           >
             确认上传

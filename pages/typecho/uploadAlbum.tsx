@@ -23,7 +23,13 @@ import {
   EyeTwoTone,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Host4NodeJS, Host4Springboot, useUUID } from "../../x";
+import {
+  Host4NodeJS,
+  Host4Springboot,
+  useHttpGet,
+  useHttpPost,
+  useUUID,
+} from "../../x";
 import TextInput from "../../components/TextInput";
 import { useRouter, withRouter } from "next/router";
 import { Album, Article } from "../../interfaces";
@@ -50,13 +56,14 @@ const WriteArticle: React.FC<UploadAlbumProps> = (props) => {
   );
 
   useEffect(() => {
-    fetch(`${Host4NodeJS}/album/selectAlbum?id=${router.query.id}`)
-      .then((response) => response.json())
-      .then((json) => {
-        if (json.status == 1) {
-          setAlbum(Object.assign({}, album, json.data));
-        }
-      });
+    (async () => {
+      let result = await useHttpGet(
+        `${Host4NodeJS}/album/selectAlbum?id=${router.query.id}`
+      );
+      if (result.status == 1) {
+        setAlbum(Object.assign({}, album, result.data));
+      }
+    })();
     return () => {};
   }, [router]);
 
@@ -171,14 +178,13 @@ const WriteArticle: React.FC<UploadAlbumProps> = (props) => {
             type="primary"
             style={{ width: "100%" }}
             loading={loading}
-            onClick={() => {
+            onClick={async () => {
               setLoading(true);
-              fetch(`${Host4NodeJS}/album/updateAlbum`, {
-                method: "POST",
-                body: JSON.stringify(album),
-              }).then((response) => {
-                router.back();
-              });
+              await useHttpPost(
+                `${Host4NodeJS}/album/updateAlbum`,
+                JSON.stringify(album)
+              );
+              router.back();
             }}
           >
             发表文章

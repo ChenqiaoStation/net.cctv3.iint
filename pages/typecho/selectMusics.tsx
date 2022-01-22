@@ -5,7 +5,7 @@ import { GetStaticProps } from "next";
 import { useRouter, withRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { Article, Music } from "../../interfaces";
-import { Host4NodeJS, useUUID } from "../../x";
+import { Host4NodeJS, useHttpGet, useHttpPost, useUUID } from "../../x";
 import Frameweork from "../framework";
 import styles from "../../styles/SelectArticles.module.css";
 import FormItem from "../../components/FormItem";
@@ -66,11 +66,9 @@ const SelectArticles: React.FC<MusicProps> = (props) => {
   ];
 
   useEffect(() => {
-    fetch(`${Host4NodeJS}/music/selectMusics`)
-      .then((repsonse) => repsonse.json())
-      .then((json) => {
-        setMusics(json);
-      });
+    (async () => {
+      setMusics(await useHttpGet(`${Host4NodeJS}/music/selectMusics`));
+    })();
     return () => {};
   }, [reload]);
 
@@ -111,24 +109,22 @@ const SelectArticles: React.FC<MusicProps> = (props) => {
         columns={columns}
         bordered={true}
         size="small"
+        rowKey={(music) => music.id}
       />
       <Modal
         visible={isShowUpdateModal}
         title={music.name}
-        onOk={() => {
+        onOk={async () => {
           let _music = Object.assign({}, music, {
             id: music.id ?? useUUID(),
             score: music.score ?? 0,
           });
-          fetch(`${Host4NodeJS}/music/updateMusic`, {
-            method: "POST",
-            body: JSON.stringify(_music),
-          })
-            .then((response) => response.json())
-            .then((json) => {
-              setReload(Math.random());
-              setIsShowUpdateModal(false);
-            });
+          await useHttpPost(
+            `${Host4NodeJS}/music/updateMusic`,
+            JSON.stringify(_music)
+          );
+          setReload(Math.random());
+          setIsShowUpdateModal(false);
         }}
         onCancel={() => {
           setIsShowUpdateModal(false);

@@ -4,7 +4,7 @@ import { GetStaticProps } from "next";
 import { useRouter, withRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { Picture } from "../../interfaces";
-import { Host4NodeJS, useOSS } from "../../x";
+import { Host4NodeJS, useHttpGet, useHttpPost, useOSS } from "../../x";
 import Frameweork from "../framework";
 import styles from "../../styles/SelectPictures.module.css";
 import moment from "moment";
@@ -22,14 +22,13 @@ const SelectPictures: React.FC<SelectPicturesProps> = (props) => {
     return () => {};
   }, [router]);
 
-  const loadDatas = () => {
-    fetch(`${Host4NodeJS}/album/selectAlbum?id=${router.query.id}`)
-      .then((response) => response.json())
-      .then((json) => {
-        if (json.status == 1) {
-          setPictures(json.data.children);
-        }
-      });
+  const loadDatas = async () => {
+    let result = await useHttpGet(
+      `${Host4NodeJS}/album/selectAlbum?id=${router.query.id}`
+    );
+    if (result.status == 1) {
+      setPictures(result.data.children);
+    }
   };
 
   /**
@@ -119,16 +118,13 @@ const SelectPictures: React.FC<SelectPicturesProps> = (props) => {
       <Modal
         visible={isShowUpdateModal}
         title={selectItem.title}
-        onOk={() => {
-          fetch(`${Host4NodeJS}/album/updatePicture`, {
-            method: "POST",
-            body: JSON.stringify({ id: router.query.id, data: pictures }),
-          })
-            .then((response) => response.json())
-            .then((json) => {
-              setIsShowUpdateModal(false);
-              loadDatas();
-            });
+        onOk={async () => {
+          await useHttpPost(
+            `${Host4NodeJS}/album/updatePicture`,
+            JSON.stringify({ id: router.query.id, data: pictures })
+          );
+          setIsShowUpdateModal(false);
+          loadDatas();
         }}
         onCancel={() => {
           setIsShowUpdateModal(false);

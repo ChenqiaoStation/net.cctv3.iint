@@ -5,7 +5,7 @@ import { GetStaticProps } from "next";
 import { useRouter, withRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { Article } from "../../interfaces";
-import { Host4NodeJS } from "../../x";
+import { Host4NodeJS, useHttpGet } from "../../x";
 import Frameweork from "../framework";
 import styles from "../../styles/SelectArticles.module.css";
 
@@ -109,11 +109,9 @@ const SelectArticles: React.FC<ArticleProps> = (props) => {
   };
 
   useEffect(() => {
-    fetch(`${Host4NodeJS}/article/selectArticles`)
-      .then((repsonse) => repsonse.json())
-      .then((json) => {
-        setArticles(json);
-      });
+    (async () => {
+      setArticles(await useHttpGet(`${Host4NodeJS}/article/selectArticles`));
+    })();
     return () => {};
   }, []);
 
@@ -142,6 +140,7 @@ const SelectArticles: React.FC<ArticleProps> = (props) => {
         columns={columns}
         bordered={true}
         size="small"
+        rowKey={(article) => article.id}
       />
     </Frameweork>
   );

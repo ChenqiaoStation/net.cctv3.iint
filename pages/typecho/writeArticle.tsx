@@ -23,7 +23,13 @@ import {
   EyeTwoTone,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Host4NodeJS, Host4Springboot, useUUID } from "../../x";
+import {
+  Host4NodeJS,
+  Host4Springboot,
+  useHttpGet,
+  useHttpPost,
+  useUUID,
+} from "../../x";
 import TextInput from "../../components/TextInput";
 import { useRouter, withRouter } from "next/router";
 import { Article } from "../../interfaces";
@@ -58,36 +64,35 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
   );
 
   useEffect(() => {
-    fetch(`${Host4NodeJS}/tag/selectTags`)
-      .then((repsonse) => repsonse.json())
-      .then((json) => {
-        setTags(
-          json.map(
-            (_: { parent: any; children: string[] }, _index: number) => ({
-              title: _.parent,
-              value: _.parent,
-              selectable: false,
-              children: _.children.map((__, __index) => ({
-                title: __,
-                value: __,
-              })),
-            })
-          )
-        );
-      });
+    (async () => {
+      let result = await useHttpGet(`${Host4NodeJS}/tag/selectTags`);
+      setTags(
+        result.map(
+          (_: { parent: any; children: string[] }, _index: number) => ({
+            title: _.parent,
+            value: _.parent,
+            selectable: false,
+            children: _.children.map((__, __index) => ({
+              title: __,
+              value: __,
+            })),
+          })
+        )
+      );
+    })();
     return () => {};
   }, []);
 
   useEffect(() => {
     message.info("🐞: " + "article id = " + router.query.id);
-    router.query.id &&
-      fetch(`${Host4NodeJS}/article/selectArticle?id=${router.query.id}`)
-        .then((response) => response.json())
-        .then((json) => {
-          if (json.status == 1) {
-            setArticle(Object.assign({}, article, json.data));
-          }
-        });
+    (async () => {
+      let result = await useHttpGet(
+        `${Host4NodeJS}/article/selectArticle?id=${router.query.id}`
+      );
+      if (result.status == 1) {
+        setArticle(Object.assign({}, article, result.data));
+      }
+    })();
     return () => {};
   }, [router]);
 
@@ -256,14 +261,13 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
             type="primary"
             style={{ width: "100%" }}
             loading={loading}
-            onClick={() => {
+            onClick={async () => {
               setLoading(true);
-              fetch(`${Host4NodeJS}/article/updateArticle`, {
-                method: "POST",
-                body: JSON.stringify(article),
-              }).then((response) => {
-                router.back();
-              });
+              await useHttpPost(
+                `${Host4NodeJS}/article/updateArticle`,
+                JSON.stringify(article)
+              );
+              router.back();
             }}
           >
             发表文章

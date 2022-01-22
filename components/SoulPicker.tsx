@@ -1,7 +1,7 @@
 import { withRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styles from "../styles/SoulPicker.module.css";
-import { Host4NodeJS } from "../x";
+import { Host4NodeJS, useHttpGet, useHttpPost } from "../x";
 interface SoulPickerProps {
   show: boolean;
   onItemPress: (item: any) => void;
@@ -11,11 +11,9 @@ const SoulPicker: React.FC<SoulPickerProps> = (props) => {
   const [souls, setSouls] = useState([]);
 
   useEffect(() => {
-    fetch(`${Host4NodeJS}/soul/selectSouls`, { method: "GET" })
-      .then((response) => response.json())
-      .then((json) => {
-        setSouls(json);
-      });
+    (async () => {
+      setSouls(await useHttpGet(`${Host4NodeJS}/soul/selectSouls`));
+    })();
     return () => {};
   }, [props.show]);
 
@@ -25,11 +23,11 @@ const SoulPicker: React.FC<SoulPickerProps> = (props) => {
         <div className={styles.viewItems}>
           {Array.from(souls, (_, i) => (
             <a
-              onClick={() => {
-                fetch(`${Host4NodeJS}/soul/updateSoulIndex`, {
-                  method: "POST",
-                  body: JSON.stringify({ name: _.name }),
-                });
+              onClick={async () => {
+                await useHttpPost(
+                  `${Host4NodeJS}/soul/updateSoulIndex`,
+                  JSON.stringify({ name: _.name })
+                );
                 props.onItemPress(_);
               }}
               key={i}
