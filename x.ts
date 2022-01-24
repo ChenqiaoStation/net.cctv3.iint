@@ -89,11 +89,28 @@ const isJSON = (s: string) => {
 };
 
 /**
+ * Headers 构造器
+ * @param {*} isMultiPart
+ * @returns
+ */
+const useHeaders = (isMultiPart?: boolean) => {
+  let r = Math.random().toString(36).replace(/0\./, "").substring(0, 8);
+  let s = CryptoJS.MD5(r + "@setNextJSrs").toString();
+  return Object.assign(
+    {
+      r,
+      s,
+    },
+    isMultiPart ? { "Content-Type": "application/x-www-form-urlencoded" } : null
+  );
+};
+
+/**
  * Http Get 请求
  * @param {*} url
  */
 const useHttpGet = async (url: string) => {
-  let request = await fetch(url);
+  let request = await fetch(url, { method: "GET", headers: useHeaders() });
   let text = await request.text();
   return JSON.parse(isJSON(text) ? text : aesDecrypt(text));
 };
@@ -107,6 +124,7 @@ const useHttpGet = async (url: string) => {
 const useHttpPost = async (url: string, body: string) => {
   let request = await fetch(url, {
     method: "POST",
+    headers: useHeaders(),
     body,
   });
   let text = await request.text();

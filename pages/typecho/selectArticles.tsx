@@ -110,7 +110,9 @@ const SelectArticles: React.FC<ArticleProps> = (props) => {
 
   useEffect(() => {
     (async () => {
-      setArticles(await useHttpGet(`${Host4NodeJS}/article/selectArticles`));
+      setArticles(
+        await useHttpGet(`${Host4NodeJS}/article/selectArticles?i=true`)
+      );
     })();
     return () => {};
   }, []);
