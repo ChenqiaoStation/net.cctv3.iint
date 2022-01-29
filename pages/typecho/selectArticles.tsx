@@ -36,7 +36,7 @@ const SelectArticles: React.FC<ArticleProps> = (props) => {
       key: "title",
       render: (title: string) => (
         <Tooltip title={title}>
-          <div>{title.substring(0, 36)}</div>
+          <div>{title.substring(0, 32)}</div>
         </Tooltip>
       ),
     },

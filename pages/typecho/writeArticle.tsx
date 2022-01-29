@@ -238,6 +238,7 @@ const WriteArticle: React.FC<ArticleProps> = (props) => {
         </FormItem>
         <FormItem title="密码保护">
           <Input.Password
+            value={article.password}
             placeholder="请输入密码，默认为: net.cctv3.i"
             iconRender={(visible) =>
               visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />

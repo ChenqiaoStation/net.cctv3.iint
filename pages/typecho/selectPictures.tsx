@@ -85,11 +85,11 @@ const SelectPictures: React.FC<SelectPicturesProps> = (props) => {
         {Array.from(pictures, (_, i) => (
           <Card.Grid
             key={i}
-            style={{ width: "15%", flexDirection: "column", display: "flex" }}
+            style={{ width: 155, flexDirection: "column", display: "flex" }}
           >
             <div className={styles.textTitle}>{_.title || _.file}</div>
             <Image
-              className={styles.image}
+              style={{height: 150, width: 150}}
               src={useOSS({
                 project: "net.cctv3.next",
                 target: "picture",

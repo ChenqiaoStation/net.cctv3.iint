@@ -6,13 +6,14 @@ import _ from "lodash";
 
 import TestGroupByDatas from "../data/TestGroupBy.json";
 import moment from "moment";
+import { useUUID } from "../x";
 
 const IndexPage = () => {
   useEffect(() => {
     const _datas = _.groupBy(TestGroupByDatas, (it) =>
       it.createTime.substring(0, "YYYY-MM".length)
     );
-    console.log("🐞 ~ file: index.tsx ~ line 16 ~ useEffect ~ _datas", _datas)
+    console.log("🐞 ~ file: index.tsx ~ line 16 ~ useEffect ~ _datas", _datas);
     let datas = Object.keys(_datas)
       .map((it) => ({
         parent: it,
@@ -20,6 +21,9 @@ const IndexPage = () => {
       }))
       .sort((a, b) => (moment(a.parent).isBefore(moment(b.parent)) ? 1 : -1));
     console.log("🐞 ~ file: index.tsx ~ line 23 ~ useEffect ~ result", datas);
+    for (let i = 0; i < 10; i++) {
+      console.log(useUUID());
+    }
     return () => {};
   }, []);
 
