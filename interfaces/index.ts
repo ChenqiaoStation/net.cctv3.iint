@@ -58,7 +58,6 @@ export interface OSSTarget {
 
 export interface Discuss {
   id: string;
-  parent?: string;
   title: string;
   message: string;
   status: boolean;
@@ -67,8 +66,14 @@ export interface Discuss {
   agent: string;
   address: string;
   time: string;
-  children: Discuss[];
 }
+
+export interface DiscussParent extends Discuss {
+  parent: string;
+  children: DiscussChild[];
+}
+
+export interface DiscussChild extends Discuss {}
 
 export interface Music {
   id: string;
@@ -79,4 +84,19 @@ export interface Music {
   lrc: string;
   status: boolean;
   score: number;
+}
+
+export interface Web {
+  id: string;
+  title: string;
+  message: string;
+  score: number;
+  status: boolean;
+}
+
+export interface WebChild extends Web {
+  url: string;
+}
+export interface WebParent extends Web {
+  children: WebChild[];
 }

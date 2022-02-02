@@ -63,7 +63,7 @@ const pages = [
       {
         name: "链接管理",
         key: "links",
-        page: "/",
+        page: "/selectWebs",
         icon: <SortDescendingOutlined />,
       },
       {
