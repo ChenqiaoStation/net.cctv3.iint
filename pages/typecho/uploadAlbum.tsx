@@ -107,7 +107,7 @@ const WriteArticle: React.FC<UploadAlbumProps> = (props) => {
         {album.isGroup ? (
           <div />
         ) : (
-          <Form.Item label="文章头图">
+          <Form.Item label="相册封面">
             <Upload
               action={`${Host4Springboot}/fileUploader.action`}
               listType="picture"
@@ -187,7 +187,7 @@ const WriteArticle: React.FC<UploadAlbumProps> = (props) => {
               router.back();
             }}
           >
-            发表文章
+            创建相册
           </Button>
         </Form.Item>
       </Form>

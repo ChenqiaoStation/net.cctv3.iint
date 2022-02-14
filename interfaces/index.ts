@@ -100,3 +100,12 @@ export interface WebChild extends Web {
 export interface WebParent extends Web {
   children: WebChild[];
 }
+
+export interface Clipboard {
+  id: string;
+  title: string;
+  message: string;
+  IP: string;
+  agent: string;
+  time: string;
+}
