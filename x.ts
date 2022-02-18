@@ -4,7 +4,8 @@ import CryptoJS from "crypto-js";
 // 公司: 192.168.110.131
 // 宿舍: 192.168.0.109
 // 服务器: 1.15.80.141
-const Host4NodeJS = "http://1.15.80.141:2021/api";
+// 服务器 HTTPS: api.cctv3.net/api
+const Host4NodeJS = "https://api.cctv3.net/api";
 const Host4Springboot = "http://localhost:8080";
 
 /**
