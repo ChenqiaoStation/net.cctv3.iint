@@ -20,6 +20,12 @@ const WriteArticle: React.FC<UploadPicturesProps> = (props) => {
   return (
     <Frameweork>
       <Form className={styles.views} layout={"vertical"}>
+        <div style={{ fontSize: 18, color: "#333" }}>提示: </div>
+        <div style={{ color: "#ff5252" }}>
+          为了防止以后乱了，图片上传以前统一用 useUUID 来个 8 位的
+          ID，然后重命名一下。
+        </div>
+        <div style={{ height: 12 }} />
         <Form.Item label="文章头图">
           <Upload
             action={`${Host4Springboot}/fileUploader.action`}
